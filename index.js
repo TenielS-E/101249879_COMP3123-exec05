@@ -46,13 +46,26 @@ router.get('/profile', (req,res) => {
 */
 router.post('/login', (req,res) => {
     fs.readFile('user.json', 'utf8', (err, data) => {
-             const username=req.query.N;
-             const jsonData = JSON.parse(data);
-             if(jsonData.username==username && jsonData.password==password){res.send(`{
-        status: true,
-        message: "User Is valid"
-    }`);}
-             else{res.send(`This Name: ${username} is not Exist`);}
+        const username=req.query.N;
+        const jsonData = JSON.parse(data);
+        if(jsonData.username==username && jsonData.password==password){
+            res.send(`{
+            status: true,
+            message: "User Is valid"
+            }`);
+        }
+        else if (jsonData.username != username){
+            res.send(`{
+            status: false,
+            message: "User Name is invalid"
+            }`);
+        }
+        else if (jsonData.password !=password){
+            res.send(`{
+            status: false,
+            message: "Password is invalid"
+            }`);
+        }
     });
 });
 
