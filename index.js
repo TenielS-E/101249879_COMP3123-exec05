@@ -1,4 +1,5 @@
 const express = require('express');
+var fs = require('fs');
 const app = express();
 const router = express.Router();
 
@@ -8,14 +9,20 @@ const router = express.Router();
 - Return home.html page to client
 */
 router.get('/home', (req,res) => {
-  res.send('This is home router');
+  fs.readfile('home.html', function(err, data) {
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    res.write(data);
+    res.end();
+  });
 });
 
 /*
 - Return all details from user.json file to client as JSON format
 */
 router.get('/profile', (req,res) => {
-  res.send('This is profile router');
+    fs.readfile('user.json', 'utf8', (err, data) => {
+        res.end(data);
+      });
 });
 
 /*
@@ -38,7 +45,15 @@ router.get('/profile', (req,res) => {
     }
 */
 router.post('/login', (req,res) => {
-  res.send('This is login router');
+    fs.readFile('user.json', 'utf8', (err, data) => {
+             const username=req.query.N;
+             const jsonData = JSON.parse(data);
+             if(jsonData.username==username && jsonData.password==password){res.send(`{
+        status: true,
+        message: "User Is valid"
+    }`);}
+             else{res.send(`This Name: ${username} is not Exist`);}
+    });
 });
 
 /*
